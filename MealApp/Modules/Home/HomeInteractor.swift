@@ -1,0 +1,51 @@
+//
+//  HomeInteractor.swift
+//  MealApp
+//
+//  Created by Mine Rala on 17.08.2023.
+//
+
+import Foundation
+
+protocol HomeInteractorProtocol: AnyObject {
+    var delegate: HomeInteractorDelegate? { get set }
+    func load() async
+}
+
+protocol HomeInteractorDelegate: AnyObject {
+    func handleOutput(_ output: HomeInteractorOutput)
+}
+
+enum HomeInteractorOutput {
+    case showMeals([Meal])
+    case loadingIndicator(LoadingIndicatorMode)
+    case showError(CustomError)
+}
+
+enum LoadingIndicatorMode {
+    case start
+    case stop
+}
+
+final class HomeInteractor: HomeInteractorProtocol {
+    public weak var delegate: HomeInteractorDelegate?
+    
+    var list: [Meal] = []
+    
+    func load() async {
+        await getMeals()
+    }
+    
+    private func getMeals() async {
+        delegate?.handleOutput(.loadingIndicator(.start))
+        let response = await NetworkManager.shared.makeRequest(endpoint: .allMeals, method: .get, type: AllMeals.self)
+        delegate?.handleOutput(.loadingIndicator(.stop))
+        switch response {
+        case .success(let success):
+            self.list = success.meals
+            delegate?.handleOutput(.showMeals(list))
+        case .failure(let failure):
+            delegate?.handleOutput(.showError(failure))
+        }
+    }
+}
