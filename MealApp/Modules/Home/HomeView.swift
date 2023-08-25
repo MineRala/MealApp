@@ -36,8 +36,8 @@ final class HomeViewController: UIViewController, HomeViewProtocol {
     
     func handleOutput(_ output: HomePresenterOutput) {
         switch output {
-        case .showMealList(let array):
-            meals = array
+        case .showMealList(let list):
+            meals = list
             DispatchQueue.main.async { [weak self] in
                 guard let self else { return }
                 self.collectionView.reloadData()
@@ -59,7 +59,7 @@ final class HomeViewController: UIViewController, HomeViewProtocol {
             DispatchQueue.main.async { [weak self] in
                 guard let self else { return }
                 self.showToast(title: "Error", text: error.rawValue, delay: 5)
-            }
+            }            
         }
     }
 }
@@ -75,6 +75,7 @@ extension HomeViewController {
 // MARK: - UI
 extension HomeViewController {
     private func setupUI() {
+        view.backgroundColor = .black.withAlphaComponent(0.8)
         configureNavigationController()
         view.addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
@@ -85,10 +86,9 @@ extension HomeViewController {
     }
     
     private func configureNavigationController() {
-        view.backgroundColor = .black.withAlphaComponent(0.8)
         navigationController?.navigationBar.barTintColor = .black.withAlphaComponent(0.8)
         navigationController?.navigationBar.tintColor = .white
-        navigationController?.navigationBar.isTranslucent = false
+//        navigationController?.navigationBar.isTranslucent = false
         navigationController?.navigationBar.barStyle = .black
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.largeTitleDisplayMode = .always
@@ -106,7 +106,6 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomeCollectionViewCell", for: indexPath) as? HomeCollectionViewCell {
-            
             let meal = meals[indexPath.row]
             cell.setCell(model: meal)
             return cell}
@@ -115,6 +114,10 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 170, height: 260)
-       
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        presenter?.selectMeal(index: indexPath.row)
     }
 }

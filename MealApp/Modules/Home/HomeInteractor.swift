@@ -10,6 +10,7 @@ import Foundation
 protocol HomeInteractorProtocol: AnyObject {
     var delegate: HomeInteractorDelegate? { get set }
     func load() async
+    func selectMeal(index: Int)
 }
 
 protocol HomeInteractorDelegate: AnyObject {
@@ -20,6 +21,7 @@ enum HomeInteractorOutput {
     case showMeals([Meal])
     case loadingIndicator(LoadingIndicatorMode)
     case showError(CustomError)
+    case showMealDetails(String)
 }
 
 enum LoadingIndicatorMode {
@@ -47,5 +49,9 @@ final class HomeInteractor: HomeInteractorProtocol {
         case .failure(let failure):
             delegate?.handleOutput(.showError(failure))
         }
+    }
+    
+    func selectMeal(index: Int) {
+        delegate?.handleOutput(.showMealDetails(list[index].id))
     }
 }

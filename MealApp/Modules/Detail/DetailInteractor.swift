@@ -6,3 +6,11 @@
 //
 
 import Foundation
+
+protocol DetailInteractorProtocol: AnyObject {
+    
+}
+
+final class DetailInteractor: DetailInteractorProtocol {
+    
+}

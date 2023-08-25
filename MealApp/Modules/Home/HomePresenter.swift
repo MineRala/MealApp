@@ -9,6 +9,7 @@ import Foundation
 
 protocol HomePresenterProtocol: AnyObject {
     func load()
+    func selectMeal(index: Int)
 }
 
 enum HomePresenterOutput {
@@ -29,12 +30,15 @@ final class HomePresenter: HomePresenterProtocol {
         self.interactor.delegate = self
     }
     
-    
     func load() {
         Task {
             @MainActor in
             await interactor.load()
         }
+    }
+    
+    func selectMeal(index: Int) {
+        interactor.selectMeal(index: index)
     }
 }
 
@@ -47,6 +51,8 @@ extension HomePresenter: HomeInteractorDelegate {
             view.handleOutput(.loadingIndicator(indicatorMode))
         case .showError(let error):
             view.handleOutput(.showError(error))
+        case .showMealDetails(let mealID):
+            router.navigateToDetail(movieID: mealID, on: view)
         }
     }
 }
