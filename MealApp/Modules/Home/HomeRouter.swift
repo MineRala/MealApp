@@ -8,7 +8,7 @@
 import Foundation
 
 protocol HomeRouterProtocol: AnyObject {
-    func navigateToDetail(movieID: String, on view: HomeViewProtocol)
+    func navigateToDetail(mealID: String, on view: HomeViewProtocol)
 }
 
 final class HomeRouter: HomeRouterProtocol {
@@ -21,9 +21,9 @@ final class HomeRouter: HomeRouterProtocol {
          return view
      }
     
-    func navigateToDetail(movieID: String, on view: HomeViewProtocol) {
+    func navigateToDetail(mealID: String, on view: HomeViewProtocol) {
         guard let viewController = view as? HomeViewController else { return }
-        guard let detailViewController = DetailRouter.build(movieID: movieID) as? DetailViewController else { return }
+        guard let detailViewController = DetailRouter.build(mealID: mealID) as? DetailViewController else { return }
         viewController.navigationController?.pushViewController(detailViewController, animated: true)
     }
 }

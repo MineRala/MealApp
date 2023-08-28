@@ -18,7 +18,7 @@ enum Endpoint {
     var url: String {
         switch self {
         case .allMeals:
-            return "\(Constant.baseURL)/search.php?f=M"
+            return "\(Constant.baseURL)/search.php?f=\(Character.randomCharacter())"
         case .mealDetails(let id):
             return "\(Constant.baseURL)/lookup.php?i=\(id)"
         }

@@ -52,7 +52,7 @@ extension HomePresenter: HomeInteractorDelegate {
         case .showError(let error):
             view.handleOutput(.showError(error))
         case .showMealDetails(let mealID):
-            router.navigateToDetail(movieID: mealID, on: view)
+            router.navigateToDetail(mealID: mealID, on: view)
         }
     }
 }

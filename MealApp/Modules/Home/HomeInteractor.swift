@@ -24,15 +24,11 @@ enum HomeInteractorOutput {
     case showMealDetails(String)
 }
 
-enum LoadingIndicatorMode {
-    case start
-    case stop
-}
 
 final class HomeInteractor: HomeInteractorProtocol {
     public weak var delegate: HomeInteractorDelegate?
     
-    var list: [Meal] = []
+    private var list: [Meal] = []
     
     func load() async {
         await getMeals()
