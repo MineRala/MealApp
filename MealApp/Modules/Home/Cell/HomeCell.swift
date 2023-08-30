@@ -16,7 +16,7 @@ private enum HomeTableViewCellConstnt {
 }
 
 final class HomeCollectionViewCell: UICollectionViewCell {
-    
+    // MARK: Properties
     private lazy var containerView: UIView = {
         let view = UIView()
         view.backgroundColor = HomeTableViewCellConstnt.viewColor
@@ -54,6 +54,7 @@ final class HomeCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
+    //MARK: Cons & Decons
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureCell()

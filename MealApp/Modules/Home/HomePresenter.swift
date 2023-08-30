@@ -19,10 +19,12 @@ enum HomePresenterOutput {
 }
 
 final class HomePresenter: HomePresenterProtocol {
+    // MARK: Attributes
     private let view: HomeViewProtocol
     private let interactor: HomeInteractorProtocol
     private let router: HomeRouterProtocol
     
+    //MARK: Cons & Decons
     init(view: HomeViewProtocol, interactor: HomeInteractorProtocol, router: HomeRouterProtocol) {
         self.view = view
         self.interactor = interactor
@@ -42,6 +44,7 @@ final class HomePresenter: HomePresenterProtocol {
     }
 }
 
+// MARK: - HomeInteractorDelegate
 extension HomePresenter: HomeInteractorDelegate {
     func handleOutput(_ output: HomeInteractorOutput) {
         switch output {

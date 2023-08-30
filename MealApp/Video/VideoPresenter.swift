@@ -15,12 +15,14 @@ enum VideoPresenterOutput {
     case showVideo(String)
 }
 
-final class VideoPresenter: VideoPresenterProtocol, VideoInteractorDelegate {
+final class VideoPresenter: VideoPresenterProtocol {
+    // MARK: Attributes
     private let view: VideoViewProtocol
     private let interactor: VideoInteractorProtocol
     private let router: VideoRouterProtocol
     private let videoUrl: String
     
+    //MARK: Cons & Decons
     init(view: VideoViewProtocol, interactor: VideoInteractorProtocol, router: VideoRouterProtocol, videoUrl: String) {
         self.view = view
         self.interactor = interactor
@@ -32,7 +34,10 @@ final class VideoPresenter: VideoPresenterProtocol, VideoInteractorDelegate {
     func load() {
         interactor.load(url: videoUrl)
     }
-    
+}
+
+// MARK: - VideoInteractorDelegate
+extension VideoPresenter: VideoInteractorDelegate {
     func handleOutput(_ output: VideoInteractorOutput) {
         switch output {
         case .showVideo(let string):

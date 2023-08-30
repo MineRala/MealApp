@@ -9,6 +9,7 @@ import Foundation
 
 protocol VideoInteractorProtocol: AnyObject {
     var delegate: VideoInteractorDelegate? { get set }
+   
     func load(url: String)
 }
 
@@ -21,10 +22,10 @@ enum VideoInteractorOutput {
 }
 
 final class VideoInteractor: VideoInteractorProtocol {
+    // MARK: Attributes
     public weak var delegate: VideoInteractorDelegate?
     
     func load(url: String) {
         delegate?.handleOutput(.showVideo(url.getVideoID()))
     }
-    
 }

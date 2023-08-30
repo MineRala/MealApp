@@ -19,20 +19,24 @@ protocol DetailInteractorDelegate: AnyObject {
 
 enum DetailInteractorOutput {
     case showMeal(MealDetails)
+    case loadingIndicator(LoadingIndicatorMode)
     case showError(CustomError)
-    case setVidoe(String)
+    case setVideo(String)
 }
 
 
 final class DetailInteractor: DetailInteractorProtocol {
+    // MARK: Attributes
     public weak var delegate: DetailInteractorDelegate?
     private var details: MealDetails?
   
     func load(id: String) async {
+        delegate?.handleOutput(.loadingIndicator(.start))
         let response = await NetworkManager.shared.makeRequest(endpoint: .mealDetails(id: id), method: .get, type: Meals.self)
+        delegate?.handleOutput(.loadingIndicator(.stop))
         switch response {
         case .success(let success):
-            details = success.meals.first
+            self.details = success.meals.first
             if let details = details {
                 delegate?.handleOutput(.showMeal(details))
             }
@@ -43,7 +47,7 @@ final class DetailInteractor: DetailInteractorProtocol {
     
     func navigateToVideo() {
         if let details = details {
-            delegate?.handleOutput(.setVidoe(details.youtubeUrl))
+            delegate?.handleOutput(.setVideo(details.youtubeUrl))
         }
     }
 }

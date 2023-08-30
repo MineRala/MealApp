@@ -14,8 +14,8 @@ protocol VideoViewProtocol: AnyObject {
     func handleOutput(_ output: VideoPresenterOutput)
 }
 
-final class VideoViewController: UIViewController, VideoViewProtocol, YTPlayerViewDelegate {
-    // MARK: - UI Components
+final class VideoViewController: UIViewController {
+    // MARK: Properties
     private lazy var videoView: YTPlayerView = {
         let view = YTPlayerView()
         view.delegate = self
@@ -24,14 +24,38 @@ final class VideoViewController: UIViewController, VideoViewProtocol, YTPlayerVi
         return view
     }()
     
+    // MARK: Attributes
     var presenter: VideoPresenterProtocol?
-    
+}
+
+// MARK: - Lifecycle
+extension VideoViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         presenter?.load()
     }
+}
+
+// MARK: - Setup UI
+extension VideoViewController {
+    private func configureNavigationController() {
+        view.backgroundColor = .black
+        navigationController?.navigationBar.tintColor = .white
+    }
     
+    private func setupUI() {
+        configureNavigationController()
+        view.addSubview(videoView)
+        videoView.snp.makeConstraints { make in
+            make.centerX.centerY.width.equalToSuperview()
+            make.height.equalToSuperview().multipliedBy(0.5)
+        }
+    }
+}
+
+// MARK: - VideoViewProtocol
+extension VideoViewController: VideoViewProtocol {
     func handleOutput(_ output: VideoPresenterOutput) {
         switch output {
         case .showVideo(let id):
@@ -41,26 +65,11 @@ final class VideoViewController: UIViewController, VideoViewProtocol, YTPlayerVi
             }
         }
     }
-    
-    func playerViewDidBecomeReady(_ playerView: YTPlayerView) {
-        videoView.playVideo()
-    }
-    
 }
 
-extension VideoViewController {
-    private func setupUI() {
-        configureNavigationController()
-        view.addSubview(videoView)
-        videoView.snp.makeConstraints { make in
-            make.centerX.centerY.equalToSuperview()
-            make.width.equalToSuperview()
-            make.height.equalToSuperview().multipliedBy(0.5)
-        }
-    }
-    
-    private func configureNavigationController() {
-        view.backgroundColor = .black
-        navigationController?.navigationBar.tintColor = .white
+// MARK: - YTPlayerViewDelegate
+extension VideoViewController: YTPlayerViewDelegate {
+    func playerViewDidBecomeReady(_ playerView: YTPlayerView) {
+        videoView.playVideo()
     }
 }

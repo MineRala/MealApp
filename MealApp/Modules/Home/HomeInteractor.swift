@@ -26,8 +26,8 @@ enum HomeInteractorOutput {
 
 
 final class HomeInteractor: HomeInteractorProtocol {
+    // MARK: Attributes
     public weak var delegate: HomeInteractorDelegate?
-    
     private var list: [Meal] = []
     
     func load() async {
